@@ -23,6 +23,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Timestamp;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import static android.content.Context.MODE_PRIVATE;
 import static com.JMU.AutonomousVehicleApp.MainActivity.globalPreferenceName;
 
@@ -41,48 +45,58 @@ public class SensorsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(globalPreferenceName, MODE_PRIVATE);
-        String URL = sharedPreferences.getString("URL","http://10.0.0.218:8080/") + "cardata";
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this.getContext());
-
-        JsonObjectRequest objectRequest = new JsonObjectRequest(
-                Request.Method.GET,
-                URL,
-                null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.e("Response", response.toString());
-                        try {
-                            JSONArray jsonArray = response.getJSONArray("Locations");
-
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject locations = jsonArray.getJSONObject(i);
-                                String address = locations.getString("address");
-                                final int id = locations.getInt("id");
-                                double latitude = locations.getDouble("lat");
-                                double longitude = locations.getDouble("long");
-                                String name = locations.getString("name");
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                    }
-                }
-        );
-
-        requestQueue.add(objectRequest);
+        Timer timer = new Timer();
+        timer.schedule(new UpdateSensorData(), 0, 5000);
 
         return inflater.inflate(R.layout.fragment_sensors, container, false);
     }
 
+    class UpdateSensorData extends TimerTask {
+        @Override
+        public void run() {
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences(globalPreferenceName, MODE_PRIVATE);
+            String URL = sharedPreferences.getString("URL","http://10.0.0.218:8080/") + "cardata";
+
+            RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+
+            JsonObjectRequest objectRequest = new JsonObjectRequest(
+                    Request.Method.GET,
+                    URL,
+                    null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.e("Response", response.toString());
+                            try {
+                                JSONArray jsonArray = response.getJSONArray("Cardata");
+
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject locations = jsonArray.getJSONObject(i);
+                                    int battery = locations.getInt("battery");
+                                    int elevation = locations.getInt("elevation");
+                                    Double latitude = locations.getDouble("lat");
+                                    Double longitude = locations.getDouble("lon");
+                                    String velodyne = locations.getString("velodyne");
+                                    String lightware = locations.getString("lightware");
+                                    String rplidar = locations.getString("rplidar");
+                                    String camera = locations.getString("camera");
+                                    int velocity = locations.getInt("velocity");
+                                    String timestamp = locations.getString("timestamp");
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                        }
+                    }
+            );
+            requestQueue.add(objectRequest);
+        }
+    }
 }

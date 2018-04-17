@@ -6,7 +6,5 @@
 
     <string name="action_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="gmapsKey">AIzaSyCpYj8_U6CEylD0utj1CNjI5xrqxdh1yEs</string>
 </resources>
