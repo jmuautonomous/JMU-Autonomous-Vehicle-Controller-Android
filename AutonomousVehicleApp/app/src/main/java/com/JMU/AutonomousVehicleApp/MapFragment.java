@@ -13,6 +13,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -54,6 +55,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         MarkerOptions options = new MarkerOptions();
         options.position(xlabs).title("X-Labs");
         map.addMarker(options);
-        map.moveCamera(CameraUpdateFactory.newLatLng(xlabs));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(xlabs,17.0f));
     }
 }
