@@ -1,6 +1,7 @@
 package com.JMU.AutonomousVehicleApp;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.VoiceInteractor;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.AppCompatButton;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        //jmuurl = "http://134.126.153.21:5000/locations"
         String URL = "http://10.0.0.218:8080/locations";
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -63,7 +66,7 @@ public class MainActivity extends AppCompatActivity
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject locations = jsonArray.getJSONObject(i);
                                 String address = locations.getString("address");
-                                int id = locations.getInt("id");
+                                final int id = locations.getInt("id");
                                 double latitude = locations.getDouble("lat");
                                 double longitude = locations.getDouble("long");
                                 String name = locations.getString("name");
@@ -75,6 +78,17 @@ public class MainActivity extends AppCompatActivity
                                         ViewGroup.LayoutParams.MATCH_PARENT,
                                         ViewGroup.LayoutParams.WRAP_CONTENT
                                 ));
+                                goToButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        System.out.println("button " + id + "pressed");
+                                        setTitle("Map");
+                                        MapFragment fragment = new MapFragment();
+                                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                        fragmentTransaction.replace(R.id.fram, fragment, "frag2");
+                                        fragmentTransaction.commit();
+                                    }
+                                });
                                 goToButton.setTag(id);
                                 layout.addView(goToButton);
                             }
