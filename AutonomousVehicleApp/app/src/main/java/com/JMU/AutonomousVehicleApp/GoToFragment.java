@@ -23,14 +23,6 @@ public class GoToFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        /*click = getView().findViewById(R.id.button1);
-        click.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fetchData process = new fetchData();
-                process.execute();
-            }
-        });*/
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_go_to, container, false);

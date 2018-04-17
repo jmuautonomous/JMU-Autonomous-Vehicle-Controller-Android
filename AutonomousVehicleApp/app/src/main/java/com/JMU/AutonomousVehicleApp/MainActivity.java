@@ -1,6 +1,7 @@
 package com.JMU.AutonomousVehicleApp;
 
 import android.app.Fragment;
+import android.app.VoiceInteractor;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,8 +10,24 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.support.v7.widget.AppCompatButton;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -27,6 +44,55 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        String URL = "http://10.0.0.218:8080/locations";
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        JsonObjectRequest objectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                URL,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.e("Response", response.toString());
+                        try {
+                            JSONArray jsonArray = response.getJSONArray("Locations");
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject locations = jsonArray.getJSONObject(i);
+                                String address = locations.getString("address");
+                                int id = locations.getInt("id");
+                                double latitude = locations.getDouble("lat");
+                                double longitude = locations.getDouble("long");
+                                String name = locations.getString("name");
+
+                                LinearLayout layout = (LinearLayout) findViewById(R.id.goToButtons);
+                                Button goToButton = new android.support.v7.widget.AppCompatButton(MainActivity.this);
+                                goToButton.setText(name);
+                                goToButton.setLayoutParams(new ViewGroup.LayoutParams(
+                                        ViewGroup.LayoutParams.MATCH_PARENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT
+                                ));
+                                goToButton.setTag(id);
+                                layout.addView(goToButton);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                }
+        );
+
+        requestQueue.add(objectRequest);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
