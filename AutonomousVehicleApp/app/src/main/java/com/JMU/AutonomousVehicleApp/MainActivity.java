@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         SharedPreferences.Editor editor = getSharedPreferences(globalPreferenceName, MODE_PRIVATE).edit();
-        editor.putString("URL", "http://10.0.0.218:8080/");
+        editor.putString("URL", "http://134.126.153.21:5000/");
         editor.commit();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
