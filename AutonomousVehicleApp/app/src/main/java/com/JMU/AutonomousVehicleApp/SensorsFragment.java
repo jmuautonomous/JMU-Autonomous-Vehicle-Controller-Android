@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -24,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -46,7 +48,7 @@ public class SensorsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Timer timer = new Timer();
-        timer.schedule(new UpdateSensorData(), 0, 5000);
+        timer.schedule(new UpdateSensorData(), 0, 15000);
 
         return inflater.inflate(R.layout.fragment_sensors, container, false);
     }
@@ -82,6 +84,32 @@ public class SensorsFragment extends Fragment {
                                     String camera = locations.getString("camera");
                                     int velocity = locations.getInt("velocity");
                                     String timestamp = locations.getString("timestamp");
+
+                                    DecimalFormat decpl = new DecimalFormat("#.00000");
+
+                                    TextView sensor1text;
+                                    sensor1text = getView().findViewById(R.id.sensorText1);
+                                    sensor1text.setText(Integer.toString(battery) + "V");
+
+                                    TextView sensor2text;
+                                    sensor2text = getView().findViewById(R.id.sensorText2);
+                                    sensor2text.setText(decpl.format(latitude) + ", " + decpl.format(longitude));
+
+                                    TextView sensor3text;
+                                    sensor3text = getView().findViewById(R.id.sensorText3);
+                                    sensor3text.setText(velodyne);
+
+                                    TextView sensor4text;
+                                    sensor4text = getView().findViewById(R.id.sensorText4);
+                                    sensor4text.setText(lightware);
+
+                                    TextView sensor5text;
+                                    sensor5text = getView().findViewById(R.id.sensorText5);
+                                    sensor5text.setText(rplidar);
+
+                                    TextView sensor6text;
+                                    sensor6text = getView().findViewById(R.id.sensorText6);
+                                    sensor6text.setText(camera);
                                 }
 
                             } catch (JSONException e) {
