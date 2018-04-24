@@ -7,7 +7,7 @@
 		<img src="https://img.shields.io/github/license/jmuautonomous/JMU-Autonomous-Vehicle-Controller-Android-iOS-.svg" alt="license">
 	</a>
 	<a href="https://github.com/jmuautonomous/JMU-Autonomous-Vehicle-Controller-Android-iOS-/releases">
-		<img src="https://img.shields.io/badge/release-1.0.0-blue.svg" alt="GitHub release">
+		<img src="https://img.shields.io/badge/release-0.0.1-blue.svg" alt="GitHub release">
 	</a>
 </p>
 An android app used to monitor James Madison University's autonomous vehicle's sensors and select the destination to which the car will drive itself
