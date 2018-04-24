@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        //setting global URL variable
         SharedPreferences.Editor editor = getSharedPreferences(globalPreferenceName, MODE_PRIVATE).edit();
         editor.putString("URL", "http://134.126.153.21:5000/");
         editor.commit();

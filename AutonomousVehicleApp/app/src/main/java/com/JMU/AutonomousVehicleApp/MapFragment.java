@@ -16,6 +16,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 
 /**
@@ -52,8 +53,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         map = googleMap;
 
         LatLng xlabs = new LatLng(38.431928, -78.875965);
+        //LatLng xlabs1 = new LatLng(38.432146, -78.876106);
+        //LatLng xlabs2 = new LatLng(38.432129, -78.876287);
+        //LatLng xlabs3 = new LatLng(38.431602, -78.876174);
+
         MarkerOptions options = new MarkerOptions();
         options.position(xlabs).title("X-Labs");
+        /*map.addPolyline(new PolylineOptions()
+                .add(xlabs1, xlabs2, xlabs3, xlabs)
+                .width(1)
+                .color(android.R.color.holo_red_light)
+                .geodesic(false)
+                .clickable(false)
+        );*/
         map.addMarker(options);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(xlabs,17.0f));
     }

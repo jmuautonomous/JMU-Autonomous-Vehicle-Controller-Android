@@ -1,7 +1,9 @@
 package com.JMU.AutonomousVehicleApp;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -72,8 +74,8 @@ public class GoToFragment extends Fragment {
                                 JSONObject locations = jsonArray.getJSONObject(i);
                                 String address = locations.getString("address");
                                 final int id = locations.getInt("id");
-                                final double latitude = locations.getDouble("lat");
-                                final double longitude = locations.getDouble("long");
+                                final double dlatitude = locations.getDouble("lat");
+                                final double dlongitude = locations.getDouble("long");
                                 String name = locations.getString("name");
 
                                 LinearLayout layout = getView().findViewById(R.id.goToButtons);
@@ -90,8 +92,8 @@ public class GoToFragment extends Fragment {
 
                                         JSONObject postData = new JSONObject();
                                         try {
-                                            postData.put("lat", latitude);
-                                            postData.put("long", longitude);
+                                            postData.put("lat", dlatitude);
+                                            postData.put("long", dlongitude);
                                             postData.put("elevation", 0);
 
                                             new SendDeviceDetails().doInBackground("http://134.126.153.21:5000/goals", postData.toString());
@@ -99,10 +101,15 @@ public class GoToFragment extends Fragment {
                                             e.printStackTrace();
                                         }
 
-                                        MapFragment fragment = new MapFragment();
+                                        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                                                Uri.parse("http://maps.google.com/maps?daddr=" + dlatitude + "," + dlongitude));
+                                                /*Uri.parse("http://maps.google.com/maps?saddr=20.344,34.34&daddr=20.5666,45.345"));*/
+                                        startActivity(intent);
+
+                                        /*MapFragment fragment = new MapFragment();
                                         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                                         fragmentTransaction.replace(R.id.fram, fragment, "frag2");
-                                        fragmentTransaction.commit();
+                                        fragmentTransaction.commit();*/
                                     }
                                 });
                                 goToButton.setTag(id);
