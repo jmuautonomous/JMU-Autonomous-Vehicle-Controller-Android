@@ -13,10 +13,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 
 /**
@@ -48,6 +46,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         mapFragment.getMapAsync(this);
     }
 
+    //setting up google maps on view
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;

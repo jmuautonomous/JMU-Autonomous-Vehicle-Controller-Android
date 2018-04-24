@@ -4,13 +4,10 @@ package com.JMU.AutonomousVehicleApp;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -24,7 +21,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -57,10 +53,13 @@ public class SensorsFragment extends Fragment {
         @Override
         public void run() {
             SharedPreferences sharedPreferences = getContext().getSharedPreferences(globalPreferenceName, MODE_PRIVATE);
+
+            //getting global URL from shared preferences. If this fails the default value will be http://10.0.0.218:8080/
             String URL = sharedPreferences.getString("URL","http://10.0.0.218:8080/") + "cardata";
 
             RequestQueue requestQueue = Volley.newRequestQueue(getContext());
 
+            //creating json object request to GET data from api
             JsonObjectRequest objectRequest = new JsonObjectRequest(
                     Request.Method.GET,
                     URL,
@@ -72,6 +71,7 @@ public class SensorsFragment extends Fragment {
                             try {
                                 JSONArray jsonArray = response.getJSONArray("Cardata");
 
+                                //looping through items to display car sensor data
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject locations = jsonArray.getJSONObject(i);
                                     int battery = locations.getInt("battery");

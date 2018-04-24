@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.commit();
     }
 
+    //function that determines what happens when back button is pressed
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        //each item is a fragment not an activity so we have to set its title here in MainActivity
         if (id == R.id.nav_goto) {
             setTitle("Go To");
             GoToFragment fragment = new GoToFragment();

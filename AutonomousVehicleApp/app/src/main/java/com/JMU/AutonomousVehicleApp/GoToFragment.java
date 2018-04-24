@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,15 +25,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
 import java.net.URL;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -55,10 +49,13 @@ public class GoToFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(globalPreferenceName, MODE_PRIVATE);
+
+        //getting global URL from shared preferences. If this fails the default value will be http://10.0.0.218:8080/
         String URL = sharedPreferences.getString("URL","http://10.0.0.218:8080/") + "locations";
 
         RequestQueue requestQueue = Volley.newRequestQueue(this.getContext());
 
+        //creating json object request to GET data from api
         JsonObjectRequest objectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 URL,
@@ -70,6 +67,7 @@ public class GoToFragment extends Fragment {
                         try {
                             JSONArray jsonArray = response.getJSONArray("Locations");
 
+                            //looping through items to create buttons and their actions
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject locations = jsonArray.getJSONObject(i);
                                 String address = locations.getString("address");
@@ -101,6 +99,7 @@ public class GoToFragment extends Fragment {
                                             e.printStackTrace();
                                         }
 
+                                        //starting google maps intent
                                         Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                                                 Uri.parse("http://maps.google.com/maps?daddr=" + dlatitude + "," + dlongitude));
                                                 /*Uri.parse("http://maps.google.com/maps?saddr=20.344,34.34&daddr=20.5666,45.345"));*/
@@ -112,6 +111,8 @@ public class GoToFragment extends Fragment {
                                         fragmentTransaction.commit();*/
                                     }
                                 });
+
+                                //tagging buttons with their id
                                 goToButton.setTag(id);
                                 layout.addView(goToButton);
                             }
@@ -138,6 +139,7 @@ public class GoToFragment extends Fragment {
 
     private class SendDeviceDetails extends AsyncTask<String, Void, String> {
 
+        //controlling the POST request to send the data to the server
         @Override
         protected String doInBackground(String... params) {
 
